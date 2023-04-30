@@ -2,6 +2,8 @@ use notify::*;
 use std::env;
 use std::fs;
 use std::{path::Path, time::Duration};
+
+use crate::parse_to_lang::parse;
 mod parse_to_lang;
 
 // example of detecting the recommended watcher kind
@@ -30,7 +32,8 @@ fn main() {
             //println!("update: {:?}", kind);
             let contents =
                 fs::read_to_string(paths[0].as_path()).expect("Should have been able to read the file");
-            println!("With text:\n{contents}");
+            parse(contents);
+            //println!("With text:\n{contents}");
         }
     }
 }
