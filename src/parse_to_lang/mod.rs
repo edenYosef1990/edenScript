@@ -1,5 +1,30 @@
+use std::collections::HashMap;
 
-pub struct GameData;
+
+pub struct GlobalObject {
+    properties_dict: HashMap<String,u32>
+}
+
+pub enum Command {
+    SetPropertyCommand(SetPropertyCommandInfo),
+    CreateObject,
+    RemoveObject
+}
+
+pub struct SetPropertyCommandInfo{
+    object_id: String,
+    property_name: String,
+    op: Op
+}
+
+pub enum Op {
+    Add(u32),
+    Substruct(u32)
+}
+
+pub struct GameData {
+    values_dict: HashMap<String,GlobalObject>
+}
 
 fn get_lines_by_indentation_level(lines: &Vec<String> , start: usize, indentation_level: usize) -> (usize,usize){
     let end_index = lines[start..].iter()
