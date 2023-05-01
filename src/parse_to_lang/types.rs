@@ -63,13 +63,21 @@ pub struct Event {
     pub invoked_commands: Vec<Command>
 }
 
+pub struct Grid {
+    pub id: String,
+    pub layer_number: u32,
+    pub image_path: String
+
+}
+
 pub struct GameData {
     pub values_dict: HashMap<String,GlobalObject>,
-    pub events: Vec<Event>
+    pub events: Vec<Event>,
+    pub grids: Vec<Grid>
 }
 
 impl GameData{
     pub fn new() -> Self{
-        Self { values_dict: HashMap::new() , events: vec![] }
+        Self { values_dict: HashMap::new() , events: vec![] , grids: vec![] }
     }
 }
