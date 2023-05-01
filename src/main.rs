@@ -29,11 +29,11 @@ fn main() {
 
     for e in rx {
         if let Ok(Event { kind: _, paths, attrs: _ }) = e {
-            //println!("update: {:?}", kind);
+            //println!("path is ${:?}",paths[0].as_path());
+            //if !paths[0].as_path().ends_with(&".txt") {continue;}
             let contents =
                 fs::read_to_string(paths[0].as_path()).expect("Should have been able to read the file");
             parse(contents);
-            //println!("With text:\n{contents}");
         }
     }
 }

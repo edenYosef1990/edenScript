@@ -2,6 +2,8 @@ use std::{collections::HashMap, ops::{MulAssign, AddAssign}};
 
 use bevy::prelude::KeyCode;
 
+use super::entity_types::EntityCreation;
+
 #[derive(Debug)]
 pub struct PropertiesGroup{
     pub components_names: Vec<String>
@@ -81,6 +83,7 @@ pub struct Grid {
 
 #[derive(Debug)]
 pub struct GameData {
+    pub entities_creation: Vec<EntityCreation>,
     pub values_dict: HashMap<String,GlobalObject>,
     pub events: Vec<Event>,
     pub grids: Vec<Grid>
@@ -88,6 +91,6 @@ pub struct GameData {
 
 impl GameData{
     pub fn new() -> Self{
-        Self { values_dict: HashMap::new() , events: vec![] , grids: vec![] }
+        Self { values_dict: HashMap::new() , events: vec![] , grids: vec![] , entities_creation: vec![] }
     }
 }

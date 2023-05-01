@@ -1,0 +1,5 @@
+onPress W =>
+    bla += 5
+    bla = 5
+    bla -= 5
+setEntity eden , power 5 , defence 4 , blockable
