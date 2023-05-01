@@ -1,8 +1,9 @@
+use core::panic;
 use std::{collections::HashMap, ops::{AddAssign, MulAssign}, str::SplitWhitespace};
 
 use bevy::prelude::KeyCode;
 
-use self::types::{GameData, EventSource, Event, Command, SetPropertyCommandInfo};
+use self::types::{GameData, EventSource, Event, Command, SetPropertyCommandInfo, Op};
 mod types;
 
 
@@ -58,11 +59,16 @@ fn line_to_command(str: &String) -> Command {
     let property_name = if let Some(property_name) = 
     words_inside_word.next() {property_name} else {"position"};
     let op = words.next().unwrap();
-    let value = words.next().unwrap();
+    let value :u32 = words.next().unwrap().trim().parse().unwrap();
     Command::SetPropertyCommand(SetPropertyCommandInfo{
         object_id: entity_name.to_string(),
         property_name: property_name.to_string(),
-        op: types::Op::AssignVal(u32::from(value))
+        op: match op {
+            "+=" => Op::Add(value),
+            "-=" => Op::Substruct(value),
+            "=" => Op::AssignVal(value),
+            _ => panic!("invalid input!")
+        }
     })
 }
 

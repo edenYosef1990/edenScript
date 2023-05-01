@@ -42,9 +42,9 @@ pub enum Command {
 }
 
 pub struct SetPropertyCommandInfo{
-    object_id: String,
-    property_name: String,
-    op: Op
+    pub object_id: String,
+    pub property_name: String,
+    pub op: Op
 }
 
 pub enum Op {
@@ -59,8 +59,8 @@ pub enum EventSource{
 }
 
 pub struct Event {
-    event_source: EventSource,
-    invoked_commands: Vec<Command>
+    pub event_source: EventSource,
+    pub invoked_commands: Vec<Command>
 }
 
 pub struct GameData {
