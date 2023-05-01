@@ -64,6 +64,12 @@ pub struct Event {
 }
 
 pub struct GameData {
-    values_dict: HashMap<String,GlobalObject>,
-    events: Vec<Event>
+    pub values_dict: HashMap<String,GlobalObject>,
+    pub events: Vec<Event>
+}
+
+impl GameData{
+    pub fn new() -> Self{
+        Self { values_dict: HashMap::new() , events: vec![] }
+    }
 }

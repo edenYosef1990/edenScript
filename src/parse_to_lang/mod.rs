@@ -1,6 +1,8 @@
 use std::{collections::HashMap, ops::{AddAssign, MulAssign}, str::SplitWhitespace};
 
 use bevy::prelude::KeyCode;
+
+use self::types::{GameData, EventSource, Event, Command};
 mod types;
 
 
@@ -46,17 +48,29 @@ fn get_lines_by_indentation_level(lines: &Vec<String> , start: usize, indentatio
     (start.clone(), lines.len())
 }
 
-fn parse_set_press(mut words_after_press_keyword : SplitWhitespace){
+fn line_to_command(str: &String) -> Command {
+    
+
+}
+
+fn compose_event_object(event_source: EventSource , lines: &[String]) -> Event {
+    let commands : Vec<Command> = lines.iter().map(|line| line_to_command(line)).collect();
+    Event { event_source: event_source , invoked_commands: commands }
+}
+
+fn parse_set_press(mut words_after_press_keyword : SplitWhitespace) -> EventSource{
     if let Some("=>") = words_after_press_keyword.next() { }
     else {panic!("invalid input!");}
 
     if let Some(char) = words_after_press_keyword.next() {
         let key_code = str_to_key_code(char);
+        return EventSource::KeyPressed(key_code);
      }
-
+     panic!("invalid input!");
 }
 
 pub fn parse(file_content: String){
+    let mut game_Data = GameData::new();
     let lines = file_content.lines();
     let mut lines_vec : Vec<String> = vec![];
     for line in lines {
@@ -71,7 +85,12 @@ pub fn parse(file_content: String){
             Some("setEvent") => {
                 let (start_scope, end_scope) = get_lines_by_indentation_level(&lines_vec, pos+1, 1);
             },
-            Some("setPress") => {parse_set_press(words)},
+            Some("setPress") => {
+                let (start_scope, end_scope) = get_lines_by_indentation_level(&lines_vec, pos+1, 1);
+                let event_source = parse_set_press(words);
+                let event = compose_event_object(event_source, &lines_vec[start_scope..end_scope]);
+                game_Data.events.push(event);
+            },
             _ => {}
         }
 
