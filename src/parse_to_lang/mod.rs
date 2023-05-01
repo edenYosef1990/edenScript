@@ -52,12 +52,12 @@ fn get_lines_by_indentation_level(lines: &Vec<String> , start: usize, indentatio
 fn line_to_command(str: &String) -> Command {
     let mut words = str.split_whitespace();
     let word = words.next().unwrap();
-    if let Some(word) = words.next() {
-    }
+
     let mut words_inside_word = word.split(".");
     let entity_name = words_inside_word.next().unwrap();
-    let property_name = if let Some(property_name) = 
-    words_inside_word.next() {property_name} else {"position"};
+    let property_name = if let Some(property_name) = words_inside_word.next() {property_name} else {"position"};
+
+    println!("property is {}",property_name);
     let op = words.next().unwrap();
     let value :u32 = words.next().unwrap().trim().parse().unwrap();
     Command::SetPropertyCommand(SetPropertyCommandInfo{
@@ -73,7 +73,6 @@ fn line_to_command(str: &String) -> Command {
 }
 
 fn compose_event_object(event_source: EventSource , lines: &[String]) -> Event {
-    println!("size is {}",lines.len());
     let commands : Vec<Command> = lines.iter().map(|line| line_to_command(line)).collect();
     Event { event_source: event_source , invoked_commands: commands }
 }
