@@ -2,7 +2,7 @@ use std::{collections::HashMap, ops::{AddAssign, MulAssign}, str::SplitWhitespac
 
 use bevy::prelude::KeyCode;
 
-use self::types::{GameData, EventSource, Event, Command};
+use self::types::{GameData, EventSource, Event, Command, SetPropertyCommandInfo};
 mod types;
 
 
@@ -49,8 +49,21 @@ fn get_lines_by_indentation_level(lines: &Vec<String> , start: usize, indentatio
 }
 
 fn line_to_command(str: &String) -> Command {
-    
-
+    let mut words = str.split_whitespace();
+    let word = words.next().unwrap();
+    if let Some(word) = words.next() {
+    }
+    let mut words_inside_word = word.split(".");
+    let entity_name = words_inside_word.next().unwrap();
+    let property_name = if let Some(property_name) = 
+    words_inside_word.next() {property_name} else {"position"};
+    let op = words.next().unwrap();
+    let value = words.next().unwrap();
+    Command::SetPropertyCommand(SetPropertyCommandInfo{
+        object_id: entity_name.to_string(),
+        property_name: property_name.to_string(),
+        op: types::Op::AssignVal(u32::from(value))
+    })
 }
 
 fn compose_event_object(event_source: EventSource , lines: &[String]) -> Event {
