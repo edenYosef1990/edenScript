@@ -1,7 +1,7 @@
 use core::panic;
 use std::{collections::HashMap, ops::{AddAssign, MulAssign}, str::SplitWhitespace};
 
-use bevy::prelude::KeyCode;
+use bevy::{prelude::KeyCode, transform::commands};
 
 use self::types::{GameData, EventSource, Event, Command, SetPropertyCommandInfo, Op};
 mod types;
@@ -44,7 +44,7 @@ fn get_lines_by_indentation_level(lines: &Vec<String> , start: usize, indentatio
     let end_index = lines[start..].iter()
         .position(|line| line.starts_with(&"\t".repeat(indentation_level)));
     if let Some(end_index) = end_index {
-        return (start.clone() , end_index);
+        return (start.clone() , end_index + start);
     }
     (start.clone(), lines.len())
 }
@@ -73,16 +73,18 @@ fn line_to_command(str: &String) -> Command {
 }
 
 fn compose_event_object(event_source: EventSource , lines: &[String]) -> Event {
+    println!("size is {}",lines.len());
     let commands : Vec<Command> = lines.iter().map(|line| line_to_command(line)).collect();
     Event { event_source: event_source , invoked_commands: commands }
 }
 
 fn parse_set_press(mut words_after_press_keyword : SplitWhitespace) -> EventSource{
-    if let Some("=>") = words_after_press_keyword.next() { }
-    else {panic!("invalid input!");}
-
     if let Some(char) = words_after_press_keyword.next() {
         let key_code = str_to_key_code(char);
+
+        if let Some("=>") = words_after_press_keyword.next() { }
+        else {panic!("invalid input!");}
+
         return EventSource::KeyPressed(key_code);
      }
      panic!("invalid input!");
@@ -107,11 +109,12 @@ pub fn parse(file_content: String){
             Some("setPress") => {
                 let (start_scope, end_scope) = get_lines_by_indentation_level(&lines_vec, pos+1, 1);
                 let event_source = parse_set_press(words);
-                let event = compose_event_object(event_source, &lines_vec[start_scope..end_scope]);
+                let event = compose_event_object(event_source, &lines_vec[start_scope..end_scope+1]);
                 game_Data.events.push(event);
             },
             _ => {}
         }
 
     }
+    println!("{:?}",game_Data);
 }

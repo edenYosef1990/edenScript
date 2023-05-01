@@ -2,11 +2,13 @@ use std::{collections::HashMap, ops::{MulAssign, AddAssign}};
 
 use bevy::prelude::KeyCode;
 
+#[derive(Debug)]
 pub struct PropertiesGroup{
     pub components_names: Vec<String>
 }
 
 // it works given 99 components in total in game
+#[derive(Debug)]
 pub struct CompilerState{
     component_to_id_dict : HashMap<String,u32>,
     components_group_to_id: HashMap<u32,u32>
@@ -31,38 +33,45 @@ impl CompilerState {
     }
 }
 
+#[derive(Debug)]
 pub struct GlobalObject {
     properties_dict: HashMap<String,u32>
 }
 
+#[derive(Debug)]
 pub enum Command {
     SetPropertyCommand(SetPropertyCommandInfo),
     CreateObject,
     RemoveObject
 }
 
+#[derive(Debug)]
 pub struct SetPropertyCommandInfo{
     pub object_id: String,
     pub property_name: String,
     pub op: Op
 }
 
+#[derive(Debug)]
 pub enum Op {
     Add(u32),
     Substruct(u32),
     AssignVal(u32)
 }
 
+#[derive(Debug)]
 pub enum EventSource{
     MouseClickedOnScreen(usize,usize),
     KeyPressed(KeyCode)
 }
 
+#[derive(Debug)]
 pub struct Event {
     pub event_source: EventSource,
     pub invoked_commands: Vec<Command>
 }
 
+#[derive(Debug)]
 pub struct Grid {
     pub id: String,
     pub layer_number: u32,
@@ -70,6 +79,7 @@ pub struct Grid {
 
 }
 
+#[derive(Debug)]
 pub struct GameData {
     pub values_dict: HashMap<String,GlobalObject>,
     pub events: Vec<Event>,
