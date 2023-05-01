@@ -63,7 +63,7 @@ pub fn str_to_key_code(str: &str) -> KeyCode{
 
 fn get_lines_by_indentation_level(lines: &Vec<String> , start: usize, indentation_level: usize) -> (usize,usize){
     let end_index = lines[start..].iter()
-        .position(|line| line.starts_with(&"\t".repeat(indentation_level)));
+        .position(|line| (line.starts_with(&"\t".repeat(indentation_level))) == false);
     if let Some(end_index) = end_index {
         return (start.clone() , end_index + start);
     }
@@ -130,13 +130,14 @@ pub fn parse(file_content: String){
             },
             Some("onPress") => {
                 let (start_scope, end_scope) = get_lines_by_indentation_level(&lines_vec, pos+1, 1);
+                println!("start: {} , end: {}",start_scope,end_scope);
                 let event_source = parse_set_press(words);
-                let event = compose_event_object(event_source, &lines_vec[start_scope..end_scope]);
+                let event = compose_event_object(event_source, &lines_vec[start_scope..end_scope+1]);
                 game_Data.events.push(event);
             },
             _ => {}
         }
 
     }
-    println!("{:?}",game_Data);
+    println!("{:#?}",game_Data);
 }
